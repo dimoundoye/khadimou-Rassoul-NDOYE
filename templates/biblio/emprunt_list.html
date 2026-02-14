@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+
+{% block title %}Liste des Emprunts{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="fw-bold mb-0">Gestion des Emprunts</h2>
+    <a href="{% url 'emprunt_create' %}" class="btn btn-primary">Nouvel Emprunt</a>
+</div>
+
+<div class="glass-card p-0 overflow-hidden">
+    <div class="table-responsive">
+        <table class="table table-hover mb-0">
+            <thead class="bg-light">
+                <tr>
+                    <th class="ps-4 py-3">Livre</th>
+                    <th class="py-3">Date d'emprunt</th>
+                    <th class="py-3">Date de retour prévue</th>
+                    <th class="py-3">Statut</th>
+                    <th class="py-3 text-end pe-4">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for emprunt in emprunts %}
+                <tr>
+                    <td class="ps-4 py-3 fw-medium">{{ emprunt.livre.titre }}</td>
+                    <td class="py-3 text-muted">{{ emprunt.dateEmprunt }}</td>
+                    <td class="py-3 text-muted">
+                        {% if emprunt.dateRetour %}
+                        {{ emprunt.dateRetour }}
+                        {% else %}
+                        <span class="text-danger small fw-bold">Non retourné</span>
+                        {% endif %}
+                    </td>
+                    <td class="py-3">
+                        {% if emprunt.dateRetour %}
+                        <span class="badge bg-secondary opacity-75">Terminé</span>
+                        {% else %}
+                        <span class="badge border text-primary">En cours</span>
+                        {% endif %}
+                    </td>
+                    <td class="py-3 text-end pe-4">
+                        {% if not emprunt.dateRetour %}
+                        <a href="{% url 'emprunt_return' emprunt.pk %}" class="btn btn-sm btn-success">Enregistrer
+                            Retour</a>
+                        {% else %}
+                        <span class="text-muted small">Retourné</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5" class="text-center py-5 text-muted">
+                        Aucun emprunt enregistré.
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% if is_paginated %}
+<nav class="mt-4">
+    <ul class="pagination justify-content-center">
+        {% if page_obj.has_previous %}
+        <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">Précédent</a></li>
+        {% endif %}
+        <li class="page-item active"><span class="page-link">Page {{ page_obj.number }}</span></li>
+        {% if page_obj.has_next %}
+        <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">Suivant</a></li>
+        {% endif %}
+    </ul>
+</nav>
+{% endif %}
+{% endblock %}

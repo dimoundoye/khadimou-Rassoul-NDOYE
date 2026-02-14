@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+
+{% block title %}Liste des Livres{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="fw-bold mb-0">Catalogue des Livres</h2>
+    <a href="{% url 'livre_create' %}" class="btn btn-primary">Ajouter un livre</a>
+</div>
+
+<div class="glass-card p-0 overflow-hidden">
+    <div class="table-responsive">
+        <table class="table table-hover mb-0">
+            <thead class="bg-light">
+                <tr>
+                    <th class="ps-4 py-3">Titre</th>
+                    <th class="py-3">Auteur</th>
+                    <th class="py-3">ISBN</th>
+                    <th class="py-3">Statut</th>
+                    <th class="py-3 text-end pe-4">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for livre in livres %}
+                <tr>
+                    <td class="ps-4 py-3 fw-medium">{{ livre.titre }}</td>
+                    <td class="py-3 text-muted">{{ livre.auteur }}</td>
+                    <td class="py-3"><code class="small">{{ livre.isbn }}</code></td>
+                    <td class="py-3">
+                        <div class="d-flex align-items-center">
+                            <span
+                                class="badge {% if livre.est_disponible %}badge-available{% else %}badge-borrowed{% endif %} me-2 text-muted">
+                                {{ livre.exemplaires_disponibles }} / {{ livre.quantite }} dispo
+                            </span>
+                        </div>
+                    </td>
+                    <td class="py-3 text-end pe-4">
+                        <a href="{% url 'livre_update' livre.pk %}"
+                            class="btn btn-sm btn-light border me-2">Modifier</a>
+                        <a href="{% url 'livre_delete' livre.pk %}" class="btn btn-sm btn-outline-danger">S</a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5" class="text-center py-5 text-muted">
+                        Aucun livre trouvé dans le catalogue.
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% if is_paginated %}
+<nav class="mt-4">
+    <ul class="pagination justify-content-center">
+        {% if page_obj.has_previous %}
+        <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">Précédent</a></li>
+        {% endif %}
+
+        <li class="page-item active"><span class="page-link">Page {{ page_obj.number }} sur {{
+                page_obj.paginator.num_pages }}</span></li>
+
+        {% if page_obj.has_next %}
+        <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">Suivant</a></li>
+        {% endif %}
+    </ul>
+</nav>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<div class="row mb-5">
+    <div class="col-12">
+        <h2 class="fw-bold mb-4">Tableau de bord</h2>
+    </div>
+</div>
+
+<div class="row g-4 mb-5">
+    <div class="col-md-6 col-lg-3">
+        <div class="glass-card text-center">
+            <h6 class="text-muted mb-2">Livres Disponibles</h6>
+            <div class="stat-value">{{ livres_disponibles }}</div>
+            <p class="mb-0 small text-success">Sur {{ total_livres }} total</p>
+        </div>
+    </div>
+    <div class="col-md-6 col-lg-5">
+        <div class="glass-card">
+            <h6 class="text-muted mb-2">Meilleur Auteur</h6>
+            {% if top_auteur %}
+            <div class="h3 fw-bold mb-1">{{ top_auteur.auteur }}</div>
+            <p class="mb-0 text-muted">{{ top_auteur.nb_livres }} livres publiés</p>
+            {% else %}
+            <div class="h3 fw-bold mb-1">—</div>
+            <p class="mb-0 text-muted">Aucune donnée</p>
+            {% endif %}
+        </div>
+    </div>
+    <div class="col-md-12 col-lg-4">
+        <div class="glass-card">
+            <h6 class="text-muted mb-2">Activité Totale</h6>
+            <div class="d-flex justify-content-between align-items-center mt-3">
+                <div>
+                    <div class="h4 fw-bold mb-0">{{ total_emprunts }}</div>
+                    <small class="text-muted">Emprunts enregistrés</small>
+                </div>
+                <a href="{% url 'emprunt_create' %}" class="btn btn-primary btn-sm">Nouvel emprunt</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="glass-card h-100">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h5 class="fw-bold mb-0">Actions Rapides</h5>
+            </div>
+            <div class="d-grid gap-3">
+                <a href="{% url 'livre_create' %}" class="btn btn-outline-primary py-3">
+                    Ajouter un nouveau livre
+                </a>
+                <a href="{% url 'livre_list' %}" class="btn btn-outline-secondary py-3">
+                    Consulter le catalogue
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

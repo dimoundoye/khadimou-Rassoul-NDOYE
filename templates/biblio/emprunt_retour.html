@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+
+{% block title %}Retour de Livre{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8 col-lg-6">
+        <div class="glass-card border-success border-opacity-25">
+            <h3 class="fw-bold mb-4 text-success">Enregistrer le retour</h3>
+            <p class="text-muted mb-4">Confirmez le retour de <strong>"{{ object.livre.titre }}"</strong>.</p>
+
+            <form method="post" novalidate>
+                {% csrf_token %}
+
+                <div class="mb-4">
+                    <label for="id_dateRetour" class="form-label fw-medium">Date de retour réelle</label>
+                    <input type="date" name="dateRetour" id="id_dateRetour" class="form-control" required>
+                    <div class="form-text">Veuillez indiquer la date à laquelle le livre a été rendu.</div>
+                </div>
+
+                <div class="d-flex gap-2">
+                    <button type="submit" class="btn btn-success px-4">Valider le retour</button>
+                    <a href="{% url 'emprunt_list' %}" class="btn btn-light border px-4">Annuler</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Autofill with today's date
+    document.getElementById('id_dateRetour').valueAsDate = new Date();
+</script>
+{% endblock %}
